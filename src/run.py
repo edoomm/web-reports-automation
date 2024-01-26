@@ -38,6 +38,7 @@ def getbrowser() -> webdriver.chromium.webdriver.ChromiumDriver | webdriver.remo
     configuration.
     """
     global config
+
     if config['default_browser'] == "firefox":
         return getfirefox(config['firefox_profile_path'])
 
@@ -60,16 +61,31 @@ def runbrowser() -> None:
 
 def run() -> int:
     """Run the main program."""
-    getconfig()
-    configlogging()
+    try:
+        getconfig()
+        configlogging()
 
-    logging.info("Running main program...")
+        logging.info("Running main program...")
 
-    runbrowser()
+        runbrowser()
 
-    logging.info("Exiting program...")
+        logging.info("Exiting program succesfully...")
 
-    return 0
+        return 0
+    except json.decoder.JSONDecodeError as jde:
+        logging.error(jde)
+
+        msg = 'Cannot read config.json, make sure it follows a JSON structure'
+        logging.error(msg)
+
+        return 1
+    except FileNotFoundError as fnfe:
+        logging.error(fnfe)
+
+        msg = 'Make sure to have correctly set file names in config.json'
+        logging.error(msg)
+
+        return 2
 
 if __name__ == '__main__':
     sys.exit(run())
