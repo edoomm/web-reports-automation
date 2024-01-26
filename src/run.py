@@ -58,7 +58,10 @@ def runbrowser() -> None:
         # TODO: Edenred
 
         uber_automation = UberAutomation(config, browser)
-        uber_automation.download_last_settlement()
+        if uber_automation.download_last_settlement():
+            logging.info("Uber report download completed.")
+        else:
+            logging.warning("Uber report NOT downloaded!")
 
         input("PRESS [ENTER] TO CLOSE BROWSER... ")
     finally:
