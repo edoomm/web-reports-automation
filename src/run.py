@@ -28,6 +28,8 @@ def configlogging() -> None:
     )
 
 def getfirefox(path: str) -> webdriver.remote.webdriver.WebDriver:
+    logging.info("Creating firefox browser...")
+
     firefox_options = webdriver.FirefoxOptions()
     firefox_options.profile = path
 
@@ -52,12 +54,16 @@ def runbrowser() -> None:
     logging.info("Starting browser...")
     browser = getbrowser()
 
-    uber_automation = UberAutomation(browser)
+    try:
+        # TODO: Edenred
 
-    input("PRESS [ENTER] TO CLOSE BROWSER... ")
+        uber_automation = UberAutomation(config, browser)
+        uber_automation.download_last_settlement()
 
-    logging.info("Closing browser...")
-    browser.close()
+        input("PRESS [ENTER] TO CLOSE BROWSER... ")
+    finally:
+        logging.info("Closing browser...")
+        browser.close()
 
 def run() -> int:
     """Run the main program."""
