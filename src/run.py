@@ -7,15 +7,17 @@ from selenium import webdriver
 
 from uber_automation import UberAutomation
 
-def getconfig() -> object:
+def getconfig() -> None:
     """Get the general configuration for the program."""
+    global config
+
     with open('config/config.json', 'r') as config_file:
         config = json.load(config_file)
 
-    return config
-
-def configlogging(config: object) -> None:
+def configlogging() -> None:
     """Configure the logging."""
+    global config
+
     handlers = [logging.FileHandler('log.log')]
     if config['verbose']: handlers.append(logging.StreamHandler())
 
@@ -31,22 +33,23 @@ def getfirefox(path: str) -> webdriver.remote.webdriver.WebDriver:
 
     return webdriver.Firefox(options=firefox_options)
 
-def getbrowser(
-        config: object
-    ) -> webdriver.chromium.webdriver.ChromiumDriver | webdriver.remote.webdriver.WebDriver:
+def getbrowser() -> webdriver.chromium.webdriver.ChromiumDriver | webdriver.remote.webdriver.WebDriver:
     """Return the proper browser that will be used based on the
     configuration.
     """
+    global config
     if config['default_browser'] == "firefox":
         return getfirefox(config['firefox_profile_path'])
 
     return webdriver.Firefox()
 
-def runbrowser(config: object) -> None:
+def runbrowser() -> None:
     """Run the browser where the work will be done.
     """
+    global config
+
     logging.info("Starting browser...")
-    browser = getbrowser(config)
+    browser = getbrowser()
 
     uber_automation = UberAutomation(browser)
 
@@ -57,12 +60,12 @@ def runbrowser(config: object) -> None:
 
 def run() -> int:
     """Run the main program."""
-    config = getconfig()
-    configlogging(config)
+    getconfig()
+    configlogging()
 
     logging.info("Running main program...")
 
-    runbrowser(config)
+    runbrowser()
 
     logging.info("Exiting program...")
 
