@@ -7,14 +7,14 @@ from selenium import webdriver
 
 from uber_automation import UberAutomation
 
-def getconfig() -> None:
+def get_config() -> None:
     """Get the general configuration for the program."""
     global config
 
     with open('config/config.json', 'r') as config_file:
         config = json.load(config_file)
 
-def configlogging() -> None:
+def config_logging() -> None:
     """Configure the logging."""
     global config
 
@@ -27,7 +27,7 @@ def configlogging() -> None:
         handlers=handlers
     )
 
-def getfirefox(path: str) -> webdriver.remote.webdriver.WebDriver:
+def get_firefox(path: str) -> webdriver.remote.webdriver.WebDriver:
     logging.info("Creating firefox browser...")
 
     firefox_options = webdriver.FirefoxOptions()
@@ -35,24 +35,24 @@ def getfirefox(path: str) -> webdriver.remote.webdriver.WebDriver:
 
     return webdriver.Firefox(options=firefox_options)
 
-def getbrowser() -> webdriver.chromium.webdriver.ChromiumDriver | webdriver.remote.webdriver.WebDriver:
+def get_browser() -> webdriver.chromium.webdriver.ChromiumDriver | webdriver.remote.webdriver.WebDriver:
     """Return the proper browser that will be used based on the
     configuration.
     """
     global config
 
     if config['default_browser'] == "firefox":
-        return getfirefox(config['firefox_profile_path'])
+        return get_firefox(config['firefox_profile_path'])
 
     return webdriver.Firefox()
 
-def runbrowser() -> None:
+def run_browser() -> None:
     """Run the browser where the work will be done.
     """
     global config
 
     logging.info("Starting browser...")
-    browser = getbrowser()
+    browser = get_browser()
 
     try:
         # TODO: Edenred
@@ -71,12 +71,12 @@ def runbrowser() -> None:
 def run() -> int:
     """Run the main program."""
     try:
-        getconfig()
-        configlogging()
+        get_config()
+        config_logging()
 
         logging.info("Running main program...")
 
-        runbrowser()
+        run_browser()
 
         logging.info("Exiting program succesfully...")
 
