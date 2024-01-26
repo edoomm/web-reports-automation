@@ -25,20 +25,32 @@ def configlogging(config: object) -> None:
         handlers=handlers
     )
 
+def getfirefox(path: str) -> webdriver.remote.webdriver.WebDriver:
+    firefox_options = webdriver.FirefoxOptions()
+    firefox_options.profile = path
 
-def getbrowser() -> webdriver.chromium.webdriver.ChromiumDriver | webdriver.remote.webdriver.WebDriver:
+    return webdriver.Firefox(options=firefox_options)
+
+def getbrowser(
+        config: object
+    ) -> webdriver.chromium.webdriver.ChromiumDriver | webdriver.remote.webdriver.WebDriver:
     """Return the proper browser that will be used based on the
     configuration.
     """
+    if config['default_browser'] == "firefox":
+        return getfirefox(config['firefox_profile_path'])
+
     return webdriver.Firefox()
 
-def runbrowser() -> None:
+def runbrowser(config: object) -> None:
     """Run the browser where the work will be done.
     """
     logging.info("Starting browser...")
-    browser = getbrowser()
+    browser = getbrowser(config)
 
     uber_automation = UberAutomation(browser)
+
+    input("PRESS [ENTER] TO CLOSE BROWSER... ")
 
     logging.info("Closing browser...")
     browser.close()
@@ -50,7 +62,7 @@ def run() -> int:
 
     logging.info("Running main program...")
 
-    runbrowser()
+    runbrowser(config)
 
     logging.info("Exiting program...")
 
