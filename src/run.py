@@ -2,38 +2,29 @@
 import sys
 import json
 import logging
-import argparse
 
 from selenium import webdriver
 
 from UberAutomation import UberAutomation
 
-parser = argparse.ArgumentParser(description='Main script')
-
-qh = 'Run the program quietly'
-qa = 'store_true'
-parser.add_argument('-q', '--quiet', action=qa, help=qh)
-
-args = parser.parse_args()
-
-def configlogging() -> None:
-    """Configure the logging."""
-    handlers = [logging.FileHandler('log.log')]
-    if not args.quiet: handlers.append(logging.StreamHandler())
-
-    logging.basicConfig(
-        level=logging.INFO,
-        format='[%(asctime)s]|(%(levelname)s)|%(message)s',
-        handlers=handlers
-    )
-
 def getconfig() -> object:
     """Get the general configuration for the program."""
-    logging.info("Opening and getting configuration...")
     with open('config/config.json', 'r') as config_file:
         config = json.load(config_file)
 
     return config
+
+def configlogging(config: object) -> None:
+    """Configure the logging."""
+    handlers = [logging.FileHandler('log.log')]
+    if config['verbose']: handlers.append(logging.StreamHandler())
+
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s|%(levelname)s|%(filename)s:%(message)s',
+        handlers=handlers
+    )
+
 
 def getbrowser() -> webdriver.chromium.webdriver.ChromiumDriver | webdriver.remote.webdriver.WebDriver:
     """Return the proper browser that will be used based on the
@@ -54,13 +45,12 @@ def runbrowser() -> None:
 
 def run() -> int:
     """Run the main program."""
-    configlogging()
+    config = getconfig()
+    configlogging(config)
 
     logging.info("Running main program...")
 
-    config = getconfig()
-
-    # runbrowser()
+    runbrowser()
 
     logging.info("Exiting program...")
 

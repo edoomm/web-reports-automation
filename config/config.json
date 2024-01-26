@@ -1,4 +1,5 @@
 {
+	"verbose": true,
 	"default_browser": "firefox",
 	"firefox_profile_path": "~/.mozilla/firefox/oknoiqte.default-release",
 	"chrome_profile_path": ""
