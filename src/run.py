@@ -5,7 +5,7 @@ import logging
 
 from selenium import webdriver
 
-from UberAutomation import UberAutomation
+from uber_automation import UberAutomation
 
 def getconfig() -> object:
     """Get the general configuration for the program."""
