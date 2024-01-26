@@ -6,6 +6,7 @@ import logging
 from selenium import webdriver
 
 from uber_automation import UberAutomation
+from edenred_automation import EdenredAutomation
 
 def get_config() -> None:
     """Get the general configuration for the program."""
@@ -46,6 +47,29 @@ def get_browser() -> webdriver.chromium.webdriver.ChromiumDriver | webdriver.rem
 
     return webdriver.Firefox()
 
+def run_edenred_page(
+        browser: webdriver.chromium.webdriver.ChromiumDriver | webdriver.remote.webdriver.WebDriver
+    ) -> None:
+    """Run the edenred web page.
+    """
+    global config
+
+    edenred_automation = EdenredAutomation(config, browser)
+
+def run_uber_page(
+        browser: webdriver.chromium.webdriver.ChromiumDriver | webdriver.remote.webdriver.WebDriver
+    ) -> None:
+    """Run the uber web page.
+    """
+    global config
+
+    uber_automation = UberAutomation(config, browser)
+
+    if uber_automation.download_last_settlement():
+        logging.info("Uber report download completed.")
+    else:
+        logging.warning("Uber report NOT downloaded!")
+
 def run_browser() -> None:
     """Run the browser where the work will be done.
     """
@@ -55,13 +79,9 @@ def run_browser() -> None:
     browser = get_browser()
 
     try:
-        # TODO: Edenred
+        run_edenred_page(browser)
 
-        uber_automation = UberAutomation(config, browser)
-        if uber_automation.download_last_settlement():
-            logging.info("Uber report download completed.")
-        else:
-            logging.warning("Uber report NOT downloaded!")
+        # run_uber_page(browser)
 
         input("PRESS [ENTER] TO CLOSE BROWSER... ")
     finally:
