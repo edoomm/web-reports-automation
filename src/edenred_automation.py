@@ -135,11 +135,8 @@ class EdenredAutomation:
 
         table_data.pop(0)
 
-        # TODO CLEAN TABLE
-        print(table_data)
-        input("ENTER...")
-
-        return table_data
+        # Starting 36 row is the actual data
+        return table_data[36:]
 
     def create_csv(self) -> None:
         """Create the csv file to be downloaded."""
