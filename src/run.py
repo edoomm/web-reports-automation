@@ -103,11 +103,9 @@ def run_browser() -> None:
     browser = get_browser()
 
     try:
+        run_uber_page(browser)
+
         run_edenred_page(browser)
-
-        # run_uber_page(browser)
-
-        input("PRESS [ENTER] TO CLOSE BROWSER... ")
     finally:
         logging.info("Closing browser...")
         browser.close()

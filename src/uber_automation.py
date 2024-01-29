@@ -58,6 +58,8 @@ class UberAutomation:
             self.e_locator(self.config['dropdown_report_class'])
         )
 
+        time.sleep(self.config['general_timeout'] - 1)
+
         # Clicking option
         logging.info(
             f"Selecting '{self.config['report_option_text'],}' "
@@ -81,8 +83,9 @@ class UberAutomation:
 
     def wait_generation(self) -> None:
         """Wait for report to be generated."""
-        logging.info("Waiting for report generation...")
-        WebDriverWait(self.browser, self.config['generation_timeout']).until(
+        timeout = self.config['generation_timeout']
+        logging.info(f"Waiting for report generation for {timeout}s...")
+        WebDriverWait(self.browser, timeout).until(
             EC.presence_of_element_located(
                 (By.CSS_SELECTOR, 'div[role="alert"][data-baseweb="toast"]')
             )
@@ -117,9 +120,12 @@ class UberAutomation:
 
             self.wait_generation()
 
-            time.sleep(2)
+            time.sleep(self.config['general_timeout'])
 
             self.click_first_row_download()
+
+            time.sleep(self.config['general_timeout'])
+
             logging.info("Download completed.")
 
             return True
