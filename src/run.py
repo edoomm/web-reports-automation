@@ -2,11 +2,25 @@
 import sys
 import json
 import logging
+import argparse
 
 from selenium import webdriver
 
 from uber_automation import UberAutomation
 from edenred_automation import EdenredAutomation
+
+def get_args() -> argparse.Namespace:
+    """Get the arguments given to the program."""
+    parser = argparse.ArgumentParser(
+        description='Download reports from uber and edenred automatically'
+    )
+
+    # Arguments available
+    parser.add_argument(
+        '-i', '--interactive', help='Run the program interactively'
+    )
+
+    return parser.parse_args()
 
 def set_config() -> None:
     """Get the general configuration for the program."""
@@ -110,11 +124,35 @@ def run_browser() -> None:
         logging.info("Closing browser...")
         browser.close()
 
+def run_interactive(to_run: str) -> None:
+    """Run the program interactively."""
+    global config
+    global browser
+    global automation
+
+    browser = get_browser()
+
+    if to_run == "uber":
+        automation = UberAutomation(config, browser)
+    elif to_run == "edenred":
+        automation = EdenredAutomation(config, browser)
+    else:
+        logging.error(
+            f"Unexpected '{to_run}' option. Please type 'uber' or 'edenred'"
+        )
+        browser.close()
+
 def run() -> int:
     """Run the main program."""
     try:
+        args = get_args()
+
         set_config()
         config_logging()
+
+        if args.interactive:
+            run_interactive(args.interactive)
+            return -1
 
         logging.info("Running main program...")
 
@@ -143,4 +181,5 @@ def run() -> int:
         return 3
 
 if __name__ == '__main__':
-    sys.exit(run())
+    ret = run()
+    if ret >= 0: sys.exit(ret)
