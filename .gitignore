@@ -160,6 +160,6 @@ cython_debug/
 #.idea/
 
 
-
 # Configuration files
 config/config.json
+config/*creds
