@@ -1,5 +1,6 @@
 """The Uber automation module"""
 import time
+import json
 import logging
 
 from selenium import webdriver
@@ -19,11 +20,18 @@ class UberAutomation:
         ) -> None:
         """Create a new automation for the Uber webpage.
         """
-        self.config = config
+        self.config = config | self.get_uber_config()
         self.browser = browser
 
-        logging.info(f"Redirecting to {self.config['uber_url']}")
-        self.browser.get(self.config['uber_url'])
+        logging.info(f"Redirecting to {self.config['url']}")
+        self.browser.get(self.config['url'])
+
+    def get_uber_config(self) -> dict:
+        """Get the uber config."""
+        with open('config/uber.json', 'r') as config_file:
+            config = json.load(config_file)
+
+        return config
 
     def btn_locator(self, data_tracking_name: str) -> tuple[str, str]:
         """Locator for buttons."""

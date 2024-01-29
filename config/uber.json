@@ -1,0 +1,9 @@
+{
+	"url": "https://supplier.uber.com/orgs/f6641bdf-e215-41b0-b5f7-c8b1b5d2dd7f/reports",
+	"dropdown_report_class": "_css-bUraXk",
+	"report_option_class": "_css-dEMIui",
+	"report_option_text": "Payments Driver",
+	"click_timeout": 10,
+	"general_timeout": 2,
+	"generation_timeout": 1000
+}
