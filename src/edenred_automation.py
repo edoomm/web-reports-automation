@@ -1,3 +1,4 @@
+"""The Edenred automation module"""
 import csv
 import time
 import json
