@@ -8,7 +8,7 @@ from selenium import webdriver
 from uber_automation import UberAutomation
 from edenred_automation import EdenredAutomation
 
-def get_config() -> None:
+def set_config() -> None:
     """Get the general configuration for the program."""
     global config
 
@@ -113,7 +113,7 @@ def run_browser() -> None:
 def run() -> int:
     """Run the main program."""
     try:
-        get_config()
+        set_config()
         config_logging()
 
         logging.info("Running main program...")
