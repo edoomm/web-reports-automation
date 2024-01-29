@@ -1,5 +1,6 @@
 import csv
 import time
+import json
 import os.path
 import logging
 from io import StringIO
@@ -21,11 +22,18 @@ class EdenredAutomation:
         ) -> None:
         """Create a new automation for the Uber webpage.
         """
-        self.config = config
+        self.config = config | self.get_edenred_config()
         self.browser = browser
 
-        logging.info(f"Redirecting to '{self.config['edenred_url']}'")
-        self.browser.get(self.config['edenred_url'])
+        logging.info(f"Redirecting to '{self.config['url']}'")
+        self.browser.get(self.config['url'])
+
+    def get_edenred_config(self) -> dict:
+        """Get the edenred config."""
+        with open('config/edenred.json', 'r') as config_file:
+            config = json.load(config_file)
+
+        return config
 
     def change_selects(self) -> None:
         """Change select options for identifier and transaction selects."""
@@ -33,12 +41,12 @@ class EdenredAutomation:
 
         # Identifier select
         Select(self.browser.find_element(
-            By.ID, self.config['edenred_id_select_id']
-        )).select_by_value(self.config['edenred_id_select_val'])
+            By.ID, self.config['id_select_id']
+        )).select_by_value(self.config['id_select_val'])
         # Transaction select
         Select(self.browser.find_element(
-            By.ID, self.config['edenred_transaction_select_id']
-        )).select_by_value(self.config['edenred_transaction_select_val'])
+            By.ID, self.config['transaction_select_id']
+        )).select_by_value(self.config['transaction_select_val'])
 
     def change_text(self, input_id: str, text: str, log=True) -> None:
         """Change text for given input."""
@@ -107,15 +115,15 @@ class EdenredAutomation:
 
         # Changing dates
         f = "%d/%m/%Y"
-        self.change_text(self.config['edenred_startdate_id'], start_date.strftime(f))
-        self.change_text(self.config['edenred_enddate_id'], end_date.strftime(f))
+        self.change_text(self.config['start_date_id'], start_date.strftime(f))
+        self.change_text(self.config['end_date_id'], end_date.strftime(f))
 
     def get_table(self) -> list[str]:
         """Get transactions table as list."""
         logging.info("Getting transactions table data...")
 
         table = self.browser.find_element(
-            By.ID, self.config['edenred_table_id']
+            By.ID, self.config['table_id']
         )
 
         # Get the table rows
@@ -144,7 +152,7 @@ class EdenredAutomation:
         logging.info("Waiting for table to appear...")
         WebDriverWait(self.browser, self.config['appear_timeout']).until(
             EC.visibility_of_element_located(
-                (By.ID, self.config['edenred_table_id'])
+                (By.ID, self.config['table_id'])
             )
         )
         logging.info("Getting table...")
@@ -189,7 +197,7 @@ class EdenredAutomation:
             logging.info("Clicking consult button...")
 
             self.browser.find_element(
-                By.ID, self.config['edenred_consult_btn_id']
+                By.ID, self.config['consult_btn_id']
             ).click()
 
             # Creating csv

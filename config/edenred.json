@@ -1,0 +1,19 @@
+{
+	"url": "https://sso.edenred.com.mx/ssov280/",
+	"id_select_id": "ctl00_contenido_drpTipoIdentificador",
+	"id_select_val": "3",
+	"transaction_select_id": "ctl00_contenido_drpTipoTransaccion",
+	"transaction_select_val": "1",
+	"start_date_id": "ctl00_contenido_txtFechaDesde",
+	"end_date_id": "ctl00_contenido_txtFechaHasta",
+	"consult_btn_id": "ctl00_contenido_btnConsultar",
+	"table_id": "ctl00_contenido_grvMovimientos",
+	"user_name_input_id": "UserName",
+	"login_btn_id": "ButtonLogin",
+	"pass_input_id": "TallyHawk",
+	"click_timeout": 10,
+	"appear_timeout": 10,
+	"login_timeout": 1,
+	"card_id": "acceder_RegistraAccesProduct",
+	"movements_url": "https://tcw.edenred.com.mx/tcw/Consulta/Movimientos.aspx?menu=76&submenu=79"
+}
