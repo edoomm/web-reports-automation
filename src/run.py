@@ -19,6 +19,10 @@ def get_args() -> argparse.Namespace:
     parser.add_argument(
         '-i', '--interactive', help='Run the program interactively'
     )
+    parser.add_argument(
+        '-w', '--week',
+        help='Select and sets (in config) the number of the week for the report'
+    )
 
     return parser.parse_args()
 
@@ -28,6 +32,14 @@ def set_config() -> None:
 
     with open('config/config.json', 'r') as config_file:
         config = json.load(config_file)
+
+def save_config() -> None:
+    """Save the config."""
+    global config
+    
+    logging.info(f"Saving config '{config}'...")
+    with open('config/config.json', 'w') as config_file:
+        json.dump(config, config_file, indent=4)
 
 def config_logging() -> None:
     """Configure the logging."""
@@ -142,6 +154,20 @@ def run_interactive(to_run: str) -> None:
         )
         browser.close()
 
+def set_week(week: int) -> None:
+    """Set the number of the week from where it will get the reports."""
+    global config
+
+    if week > 0:
+        logging.warning(
+            f"Cannot set week to '{week}'. This value should be less or equal to 0."
+        )
+        logging.warning("Changes won't take place.")
+        return
+
+    config['week'] = week
+    save_config()
+
 def run() -> int:
     """Run the main program."""
     try:
@@ -150,6 +176,8 @@ def run() -> int:
         set_config()
         config_logging()
 
+        if args.week:
+            set_week(int(args.week))
         if args.interactive:
             run_interactive(args.interactive)
             return -1

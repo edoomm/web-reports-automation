@@ -107,17 +107,29 @@ class EdenredAutomation:
         logging.info(f"Redirecting to '{self.config['movements_url']}'...")
         self.browser.get(self.config['movements_url'])
 
-    def change_dates(self) -> None:
-        """Change start and end dates from inputs."""
-        logging.info("Changing dates...")
+    def get_dates(self) -> tuple[str, str]:
+        """Get the range dates based on the config."""
+        logging.info("Calculating dates...")
         # Calculates dates as settlements
-        end_date = datetime.now().date()
+        if self.config['week'] == 0:
+            end_date = datetime.now().date()
+        else:
+            today = datetime.now()
+            s = ((today.weekday() - 6) % 7) - 7*(self.config['week'] + 1)
+            end_date = today - timedelta(days=s)
+
         start_date = end_date - timedelta(days=end_date.weekday())
 
-        # Changing dates
         f = "%d/%m/%Y"
-        self.change_text(self.config['start_date_id'], start_date.strftime(f))
-        self.change_text(self.config['end_date_id'], end_date.strftime(f))
+        return start_date.strftime(f), end_date.strftime(f)
+
+    def change_dates(self) -> None:
+        """Change start and end dates from inputs."""
+        start_date, end_date = get_dates()
+
+        logging.info("Changing dates...")
+        self.change_text(self.config['start_date_id'], start_date)
+        self.change_text(self.config['end_date_id'], end_date)
 
     def get_table(self) -> list[str]:
         """Get transactions table as list."""

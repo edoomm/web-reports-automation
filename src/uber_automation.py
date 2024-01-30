@@ -7,6 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys
 
 class UberAutomation:
     """Controls the Uber webpage for gathering the necessary data for making
@@ -80,14 +81,43 @@ class UberAutomation:
             )
         )
 
-    def select_last_settlement(self) -> None:
-        """Select last settlement.
+    def change_focus(self) -> None:
+        """Change focus to the next element.
 
-        As of 2024-01-26 the last settlement is selected by default, some
-        tests were ran in order to try to select other settlements but none of
-        them were succesful.
+        Works as if the <TAB> key was pressed.
         """
-        pass
+        self.browser.switch_to.active_element.send_keys(Keys.TAB)
+
+    def select_settlement(self, jumps=3) -> None:
+        """Select settlement from given week.
+
+        A direct identification of the dropdown menu through its class name it
+        is not possible, therefore this function will only work after
+        `change_report_type` is used or the report type dropdown element has
+        the current focus.
+        """
+        logging.info("Executing `select_settlement` function...")
+        # When `jumps=3` it is assumed that the active element is the report
+        # dropdown
+        for i in range(jumps): self.change_focus()
+
+        # Opening dates dropdown
+        logging.info("Attempting to open dates dropdown...")
+        self.browser.switch_to.active_element.send_keys(Keys.SPACE)
+
+        time.sleep(self.config['general_timeout'] - 1)
+
+        logging.info(f"Selecting week: {self.config['week']}...")
+        ul_element = WebDriverWait(
+            self.browser, self.config['generation_timeout']
+        ).until(
+            EC.presence_of_element_located(
+                self.e_locator(self.config['dates_dropdown_class'])
+            )
+        )
+        li_elements = ul_element.find_elements(By.XPATH, './/li')
+        # Doing the actual select
+        li_elements[self.config['week'] - 1].click()
 
     def wait_generation(self) -> None:
         """Wait for report to be generated."""

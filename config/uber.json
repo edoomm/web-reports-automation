@@ -3,6 +3,7 @@
 	"dropdown_report_class": "_css-bUraXk",
 	"report_option_class": "_css-dEMIui",
 	"report_option_text": "Payments Driver",
+	"dates_dropdown_class": "_css-kmuqzC",
 	"click_timeout": 10,
 	"general_timeout": 2,
 	"generation_timeout": 1000
