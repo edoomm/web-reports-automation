@@ -55,6 +55,7 @@ class EdenredAutomation:
             logging.info(f"Changing text '{text}' to input '{input_id}'")
 
         input_element = self.browser.find_element(By.ID, input_id)
+        input_element.send_keys("a") # This allows to clear autofill
         input_element.clear()
         input_element.send_keys(text)
 
@@ -125,7 +126,7 @@ class EdenredAutomation:
 
     def change_dates(self) -> None:
         """Change start and end dates from inputs."""
-        start_date, end_date = get_dates()
+        start_date, end_date = self.get_dates()
 
         logging.info("Changing dates...")
         self.change_text(self.config['start_date_id'], start_date)
@@ -189,7 +190,9 @@ class EdenredAutomation:
 
         logging.info("csv file wrote.")
 
-        csv_filename = f"edenred_{datetime.now().date()}.csv"
+        start_date, end_date = self.get_dates()
+        dates = start_date.replace('/', '') + end_date.replace('/', '')
+        csv_filename = f"edenred_{dates}.csv"
         file_path = os.path.join(self.config['download_path'], csv_filename)
         logging.info(f"Saving csv to {file_path}")
 
