@@ -1,0 +1,8 @@
+{
+	"verbose": true,
+	"default_browser": "firefox",
+	"firefox_profile_path": "",
+	"chrome_userdata_path": "",
+	"chrome_profile": "",
+	"download_path": ""
+}
