@@ -1,4 +1,5 @@
 """The main script"""
+import os
 import sys
 import json
 import logging
@@ -6,8 +7,17 @@ import argparse
 
 from selenium import webdriver
 
+import install
 from uber_automation import UberAutomation
 from edenred_automation import EdenredAutomation
+
+def check_config() -> None:
+    """Check config files.
+
+    If there is no config files, it attempts to set them up.
+    """
+    if not os.path.exists('config/e_creds'): install.e_creds()
+    if not os.path.exists('config/config.json'): install.config()
 
 def get_args() -> argparse.Namespace:
     """Get the arguments given to the program."""
@@ -172,6 +182,8 @@ def run() -> int:
     """Run the main program."""
     try:
         args = get_args()
+
+        check_config()
 
         set_config()
         config_logging()
