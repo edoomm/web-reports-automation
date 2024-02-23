@@ -5,7 +5,7 @@ Webscrapping through Uber and Edenred websites to download csv reports.
 ```sh
 git clone https://github.com/edoomm/web-reports-automation.git
 cd web-reports-automation
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Usage

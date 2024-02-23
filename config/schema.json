@@ -4,5 +4,6 @@
 	"firefox_profile_path": "",
 	"chrome_userdata_path": "",
 	"chrome_profile": "",
-	"download_path": ""
+	"download_path": "",
+	"week": 0
 }
