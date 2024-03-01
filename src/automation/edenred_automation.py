@@ -8,8 +8,8 @@ from datetime import datetime, timedelta
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from automation.automation import Automation
@@ -82,9 +82,7 @@ class EdenredAutomation(Automation):
 
         # Click card
         logging.info("Waiting for clickable card to appear...")
-        WebDriverWait(self.browser, self.config['click_timeout']).until(
-            EC.element_to_be_clickable((By.ID, self.config['card_id']))
-        ).click()
+        self.perform_click((By.ID, self.config['card_id']))
         time.sleep(self.config['login_timeout'])
         logging.info("Card clicked.")
 
