@@ -1,7 +1,6 @@
 """The Edenred automation module"""
 import csv
 import time
-import json
 import os.path
 import logging
 from io import StringIO
@@ -13,28 +12,19 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-class EdenredAutomation:
+from automation.automation import Automation
+
+class EdenredAutomation(Automation):
     """Controls the Edenred webpage."""
 
     def __init__(
-            self,
-            config: object,
-            browser: webdriver.chromium.webdriver.ChromiumDriver | webdriver.remote.webdriver.WebDriver
+            self, config: dict,
+            browser: webdriver.Firefox | webdriver.Chrome,
+            config_name="edenred.json"
         ) -> None:
         """Create a new automation for the Uber webpage.
         """
-        self.config = config | self.get_edenred_config()
-        self.browser = browser
-
-        logging.info(f"Redirecting to '{self.config['url']}'")
-        self.browser.get(self.config['url'])
-
-    def get_edenred_config(self) -> dict:
-        """Get the edenred config."""
-        with open('config/edenred.json', 'r') as config_file:
-            config = json.load(config_file)
-
-        return config
+        super().__init__(config, config_name, browser)
 
     def change_selects(self) -> None:
         """Change select options for identifier and transaction selects."""
@@ -59,11 +49,6 @@ class EdenredAutomation:
         input_element.clear()
         input_element.send_keys(text)
 
-    def click_btn(self, btn_id: str, by=By.ID) -> None:
-        """Click button."""
-        logging.info(f"Clicking '{btn_id}'...")
-        self.browser.find_element(By.ID, btn_id).click()
-
     def login(self) -> None:
         """Log in to Edenred."""
         logging.info("Attempting to log in...")
@@ -73,7 +58,7 @@ class EdenredAutomation:
 
         self.change_text(self.config['user_name_input_id'], creds[0])
 
-        self.click_btn(self.config['login_btn_id'])
+        self.perform_click((By.ID, self.config['login_btn_id']))
 
         # Waiting for pass input to appear
         WebDriverWait(self.browser, self.config['appear_timeout']).until(
@@ -86,7 +71,7 @@ class EdenredAutomation:
 
         self.change_text(self.config['pass_input_id'], creds[1], False)
 
-        self.click_btn(self.config['login_btn_id'])
+        self.perform_click((By.ID, self.config['login_btn_id']))
 
         logging.info("Log in succesful.")
 
@@ -212,9 +197,7 @@ class EdenredAutomation:
             # Clicking consult button
             logging.info("Clicking consult button...")
 
-            self.browser.find_element(
-                By.ID, self.config['consult_btn_id']
-            ).click()
+            self.perform_click((By.ID, self.config['consult_btn_id']))
 
             # Creating csv
             self.create_csv()

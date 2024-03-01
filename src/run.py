@@ -8,8 +8,8 @@ import argparse
 from selenium import webdriver
 
 import install
-from uber_automation import UberAutomation
-from edenred_automation import EdenredAutomation
+from automation.uber_automation import UberAutomation
+from automation.edenred_automation import EdenredAutomation
 
 def check_config() -> None:
     """Check config files.
