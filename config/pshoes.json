@@ -1,0 +1,6 @@
+{
+	"url": "https://www.priceshoes.com/lp/productos/calzado",
+	"click_timeout": 10,
+	"products_container_class": "infinite-scroll-component",
+	"product_elements_class": "ProductCard_square-fixed__9u4T6"
+}

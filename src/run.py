@@ -10,6 +10,7 @@ from selenium import webdriver
 import install
 from automation.uber_automation import UberAutomation
 from automation.edenred_automation import EdenredAutomation
+from automation.pshoes_automation import PriceShoesAutomation
 
 def check_config() -> None:
     """Check config files.
@@ -158,6 +159,8 @@ def run_interactive(to_run: str) -> None:
         automation = UberAutomation(config, browser)
     elif to_run == "edenred":
         automation = EdenredAutomation(config, browser)
+    elif to_run == "pshoes":
+        automation = PriceShoesAutomation(config, browser)
     else:
         logging.error(
             f"Unexpected '{to_run}' option. Please type 'uber' or 'edenred'"
