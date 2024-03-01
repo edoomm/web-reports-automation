@@ -36,6 +36,8 @@ class Automation:
         """
         if ".json" not in file_name: file_name += ".json"
 
+        logging.info(f"Retrieving config file: {file_name}...")
+
         with open(f'config/{file_name}', 'r') as config_file:
             config = json.load(config_file)
 
@@ -48,6 +50,8 @@ class Automation:
         :param locator: A tuple that contains a By strategy and its
         correspondant value for finding an element.
         """
+        logging.info(f"Clicking {locator}...")
+
         WebDriverWait(self.browser, self.config['click_timeout']).until(
             EC.element_to_be_clickable(locator)
         ).click()
